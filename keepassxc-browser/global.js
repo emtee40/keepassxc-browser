@@ -90,3 +90,8 @@ var siteMatch = function(site, url) {
     const rx = matchPatternToRegExp(site);
     return url.match(rx);
 };
+
+var slashNeededForUrl = function(pattern) {
+    const matchPattern = new RegExp(`^${schemeSegment}://${hostSegment}$`);
+    return matchPattern.exec(pattern);
+};

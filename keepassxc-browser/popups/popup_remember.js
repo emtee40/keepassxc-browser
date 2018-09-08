@@ -5,17 +5,24 @@ var _tab;
 function _initialize(tab) {
     _tab = tab;
 
-    // no credentials set or credentials already cleared
-    if (!_tab.credentials.username) {
+    // No credentials set or credentials already cleared
+    if (!_tab.credentials.username && !_tab.credentials.password) {
         _close();
         return;
     }
 
-    // no existing credentials to update --> disable update-button
+    // No existing credentials to update --> disable Update button
     if (_tab.credentials.list.length === 0) {
         const updateButton = $('#btn-update');
         updateButton.setAttribute('disabled', true);
         updateButton.classList.remove('btn-warning');
+    }
+
+    // No username available. This might be because of trigger from context menu --> disable New button
+    if (!_tab.credentials.username && _tab.credentials.password) {
+        const newButton = $('#btn-new');
+        newButton.setAttribute('disabled', true);
+        newButton.classList.remove('btn-success');
     }
 
     let url = _tab.credentials.url;
@@ -33,8 +40,13 @@ function _initialize(tab) {
     $('#btn-update').addEventListener('click', function(e) {
         e.preventDefault();
 
-        //  only one entry which could be updated
+        // Only one entry which could be updated
         if(_tab.credentials.list.length === 1) {
+            // Use the current username if it's empty
+            if (!_tab.credentials.username) {
+                _tab.credentials.username = _tab.credentials.list[0].login;
+            }
+
             browser.runtime.sendMessage({
                 action: 'update_credentials',
                 args: [_tab.credentials.list[0].uuid, _tab.credentials.username, _tab.credentials.password, _tab.credentials.url]
@@ -60,10 +72,35 @@ function _initialize(tab) {
                 a.setAttribute('entryId', i);
                 a.addEventListener('click', function(e) {
                     e.preventDefault();
+                    const entryId = e.currentTarget.getAttribute('entryId');
+
+                    // Use the current username if it's empty
+                    if (!_tab.credentials.username) {
+                        _tab.credentials.username = _tab.credentials.list[entryId].login;
+                    }
+
+                    // Check if the password has changed for the updated credentials
                     browser.runtime.sendMessage({
-                        action: 'update_credentials',
-                        args: [_tab.credentials.list[a.getAttribute('entryId')].uuid, _tab.credentials.username, _tab.credentials.password, _tab.credentials.url]
-                    }).then(_verifyResult);
+                        action: 'retrieve_credentials',
+                        args: [ url, '', false, true ]
+                    }).then((credentials) => {
+                        if (!credentials || credentials.length !== _tab.credentials.list.length) {
+                            _verifyResult('error');
+                            return;
+                        }
+                        
+                        // Show a notification if the user tries to update credentials using the old password
+                        if (credentials[entryId].password === _tab.credentials.password) {
+                            showNotification('Error: Credentials not updated. The password has not been changed.');
+                            _close();
+                            return;
+                        }
+
+                        browser.runtime.sendMessage({
+                            action: 'update_credentials',
+                            args: [_tab.credentials.list[entryId].uuid, _tab.credentials.username, _tab.credentials.password, _tab.credentials.url]
+                        }).then(_verifyResult); 
+                    });
                 });
 
 

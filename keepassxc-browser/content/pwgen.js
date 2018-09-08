@@ -160,7 +160,7 @@ kpxcPassword.createDialog = function() {
     const buttons = kpxcUI.createElement('div', 'w3-container w3-bar w3-center');
     const generateButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-generate'}, 'Generate');
     const copyButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-clipboard'}, 'Copy');
-    const fillButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-fillin'}, 'Fill &amp; copy');
+    const fillButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-fillin'}, 'Fill & copy');
 
     generateButton.onclick = function(e) { kpxcPassword.generate(e); };
     copyButton.onclick = function(e) { kpxcPassword.copy(e); };

@@ -255,7 +255,7 @@ cipFields.isVisible = function(field) {
     }
 
     // Check element position and size
-    if (rect.x < 0 || rect.y < 0 || rect.width < 16 || rect.height < 16) {
+    if (rect.x < 0 || rect.y < 0 || rect.width < 8 || rect.height < 8) {
         return false;
     }
 
@@ -589,17 +589,27 @@ cipObserverHelper.ignoredNode = function(target) {
 };
 
 cipObserverHelper.getInputs = function(target) {
+    // Ignores target element if it's not an element node
     if (cipObserverHelper.ignoredNode(target)) {
         return [];
     }
 
-    const input = target.getElementsByTagName('input');
-    if (input.length === 0 || input.length > _maximumInputs) {
+    // Filter out any input fields with type 'hidden' right away
+    let inputFields = [];
+    Array.from(target.getElementsByTagName('input')).forEach(e => { 
+        if (e.type !== 'hidden') {
+            inputFields.push(e);
+        }
+    });
+
+    // Do not allow more visible inputs than _maximumInputs (default value: 100)
+    if (inputFields.length === 0 || inputFields.length > _maximumInputs) {
         return [];
     }
 
+    // Only include input fields that match with cipObserverHelper.inputTypes
     let inputs = [];
-    for (const i of input) {
+    for (const i of inputFields) {
         if (cipObserverHelper.inputTypes.includes(i.getAttribute('type'))) {
             inputs.push(i);
         }
@@ -612,16 +622,14 @@ cipObserverHelper.getId = function(target) {
 };
 
 cipObserverHelper.ignoredElement = function(target) {
-    // Ignore SVG elements
-    if (target.nodeName === 'svg' || 
-        target.nodeName === 'g' ||
-        (target.parentNode && 
-        (target.parentNode.nodeName === 'svg' || target.parentNode.nodeName === 'g'))) {
+    // Ignore elements that do not have a className (including SVG)
+    if (typeof target.className !== 'string') {
         return true;
     }
 
     // Ignore KeePassXC-Browser classes
-    if (target.className && (target.className.includes('kpxc') || target.className.includes('ui-helper'))) {
+    if (target.className && target.className !== undefined && 
+        (target.className.includes('kpxc') || target.className.includes('ui-helper'))) {
         return true;
     }
 
@@ -1168,7 +1176,7 @@ cip.fillIn = function(combination, onlyPassword, suppressWarnings) {
     // exactly one pair of credentials available
     if (cip.credentials.length === 1) {
         let filledIn = false;
-        if (uField && !onlyPassword) {
+        if (uField && (!onlyPassword || _singleInputEnabledForPage)) {
             cip.setValueWithChange(uField, cip.credentials[0].login);
             _loginId = 0;
             filledIn = true;
@@ -1404,8 +1412,12 @@ cip.ignoreSite = function(sites) {
         return;
     }
 
-    const site = sites[0];
+    let site = sites[0];
     cip.initializeSitePreferences();
+
+    if (slashNeededForUrl(site)) {
+        site += '/';
+    }
 
     // Check if the site already exists
     let siteExists = false;

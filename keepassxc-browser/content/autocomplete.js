@@ -20,6 +20,25 @@ kpxcAutocomplete.create = function(input) {
     });
 
     input.addEventListener('keydown', keyDown);
+    input.addEventListener('blur', function(e) {
+        // TODO:
+        // - If input field loses focus, close the list
+
+        if (e.currentTarget.getAttribute('fetched') === true) {
+            e.currentTarget.setAttribute('fetched', false);
+        } else {
+            const fieldId = cipFields.prepareId(e.currentTarget.getAttribute('data-kpxc-id'));
+            const fields = cipFields.getCombination('username', fieldId);
+            const fieldValue = e.currentTarget.value;
+
+            // Check if the manually inserted value is one of the retrieved credentials
+            let fieldFound = kpxcAutocomplete.elements.some(e => e.value === fieldValue);
+
+            if (_f(fields.password) && _f(fields.password).getAttribute('unchanged') !== true && fieldFound !== '' && _detectedFields > 1) {
+                cip.fillInCredentials(fields, true, true);
+            }
+        }
+    });
 
     function showList(input) {
         closeList();
@@ -128,10 +147,9 @@ kpxcAutocomplete.create = function(input) {
         const fieldId = input.getAttribute('data-kpxc-id');
         cipFields.prepareId(fieldId);
         const combination = cipFields.getCombination('username', fieldId);
-
         combination.loginId = fieldId;
         _loginId = fieldId;
-
+   
         cip.fillInCredentials(combination, true, false);
         input.setAttribute('fetched', true);
     };
