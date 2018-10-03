@@ -935,7 +935,7 @@ cip.preparePageForMultipleCredentials = function(credentials) {
     kpxcAutocomplete.elements = [];
     let visibleLogin;
     for (let i = 0; i < credentials.length; i++) {
-        visibleLogin = (credentials[i].login.length > 0) ? credentials[i].login : '- no username -';
+        visibleLogin = (credentials[i].login.length > 0) ? credentials[i].login : tr('credentialsNoUsername');
         usernames.push(visibleLogin + ' (' + credentials[i].name + ')');
         const item = {
             label: visibleLogin + ' (' + credentials[i].name + ')',
@@ -1071,7 +1071,7 @@ cip.fillInFromActiveElement = function(suppressWarnings, passOnly = false) {
 
     if (passOnly) {
         if (!_f(combination.password)) {
-            const message = 'Error:\nUnable to find a password field';
+            const message = tr('fieldsNoPasswordField');
             browser.runtime.sendMessage({
                 action: 'show_notification',
                 args: [message]
@@ -1162,7 +1162,7 @@ cip.setValueWithChange = function(field, value) {
 cip.fillIn = function(combination, onlyPassword, suppressWarnings) {
     // no credentials available
     if (cip.credentials.length === 0 && !suppressWarnings) {
-        const message = 'Error:\nNo logins found.';
+        const message = tr('credentialsNoLoginsFound');
         browser.runtime.sendMessage({
             action: 'show_notification',
             args: [message]
@@ -1197,7 +1197,7 @@ cip.fillIn = function(combination, onlyPassword, suppressWarnings) {
 
         if (!filledIn) {
             if (!suppressWarnings) {
-                const message = 'Error:\nCannot find fields to fill in.';
+                const message = tr('fieldsFill');
                 browser.runtime.sendMessage({
                     action: 'show_notification',
                     args: [message]
@@ -1229,7 +1229,7 @@ cip.fillIn = function(combination, onlyPassword, suppressWarnings) {
 
         if (!filledIn) {
             if (!suppressWarnings) {
-                const message = 'Error:\nCannot find fields to fill in.';
+                const message = tr('fieldsFill');
                 browser.runtime.sendMessage({
                     action: 'show_notification',
                     args: [message]
@@ -1290,7 +1290,7 @@ cip.fillIn = function(combination, onlyPassword, suppressWarnings) {
             }
             else if (countPasswords < 1) {
                 if (!suppressWarnings) {
-                    const message = 'Error:\nNo credentials for given username found.';
+                    const message = tr('credentialsNoUsernameFound');
                     browser.runtime.sendMessage({
                         action: 'show_notification',
                         args: [message]
@@ -1338,7 +1338,7 @@ cip.contextMenuRememberCredentials = function() {
     }
 
     if (!cip.rememberCredentials(usernameValue, passwordValue)) {
-        const message = 'Error:\nCould not detect changed credentials.';
+        const message = tr('rememberNothingChanged');
         browser.runtime.sendMessage({
             action: 'show_notification',
             args: [message]

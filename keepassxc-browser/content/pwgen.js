@@ -58,7 +58,7 @@ kpxcPassword.createIcon = function(field) {
     offset = (offset < 0) ? 0 : offset;
 
     const icon = kpxcUI.createElement('div', 'kpxc kpxc-genpw-icon ' + className,
-        {'title': 'Generate password', 'size': size, 'offset': offset, 'kpxc-genpw-field-id': field.getAttribute('kpxc-id')});
+        {'title': tr('passwordGeneratorGenerateText'), 'size': size, 'offset': offset, 'kpxc-genpw-field-id': field.getAttribute('kpxc-id')});
     icon.style.zIndex = '9999';
     icon.style.width = String(size) + 'px';
     icon.style.height = String(size) + 'px';
@@ -127,7 +127,7 @@ kpxcPassword.createDialog = function() {
     closeButton.onclick = function(e) { kpxcPassword.openDialog(); };
 
     const titleBar = kpxcUI.createElement('header', 'w3-green w3-padding-small w3-small w3-bold',
-        {'id': 'ui-titlebar'}, 'Password Generator');
+        {'id': 'ui-titlebar'}, tr('passwordGeneratorLabel'));
     firstTitleCell.append(titleBar);
     secondTitleCell.append(closeButton);
     titleCellRow.append(firstTitleCell);
@@ -135,7 +135,7 @@ kpxcPassword.createDialog = function() {
 
     const inputs = kpxcUI.createElement('div', 'w3-small w3-padding-small');
     const input = kpxcUI.createElement('input', 'w3-input w3-border w3-round-small w3-tiny',
-        {'id': 'kpxc-genpw-textfield-password', 'placeholder': 'Generated password', 'type': 'text'});
+        {'id': 'kpxc-genpw-textfield-password', 'placeholder': tr('passwordGeneratorPlaceholder'), 'type': 'text'});
     inputs.append(input);
 
     const cellRow = kpxcUI.createElement('div', 'w3-cell-row');
@@ -144,12 +144,12 @@ kpxcPassword.createDialog = function() {
         {'id': 'kpxc-genpw-checkbox-next-field', 'disabled': 'disabled', 'type': 'checkbox'});
     firstCell.append(checkboxInput);
 
-    const checkboxLabel = kpxcUI.createElement('label', 'kpxc-genpw-label w3-tiny', {}, 'also fill in the next password-field');
+    const checkboxLabel = kpxcUI.createElement('label', 'kpxc-genpw-label w3-tiny', {}, tr('passwordGeneratorLabel'));
     firstCell.append(checkboxLabel);
 
     const secondCell = kpxcUI.createElement('div', 'w3-cell w3-cell-top');
     const bitDiv = kpxcUI.createElement('div', 'w3-right-align w3-text-gray w3-tiny',
-        {'id': 'kpxc-genpw-quality'}, '??? Bits');
+        {'id': 'kpxc-genpw-quality'}, tr('passwordGeneratorBits'));
     secondCell.append(bitDiv);
 
     cellRow.append(firstCell);
@@ -158,9 +158,9 @@ kpxcPassword.createDialog = function() {
 
     const buttonStyle = 'w3-btn w3-white w3-border w3-round w3-tiny';
     const buttons = kpxcUI.createElement('div', 'w3-container w3-bar w3-center');
-    const generateButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-generate'}, 'Generate');
-    const copyButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-clipboard'}, 'Copy');
-    const fillButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-fillin'}, 'Fill & copy');
+    const generateButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-generate'}, tr('passwordGeneratorGenerate'));
+    const copyButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-clipboard'}, tr('passwordGeneratorCopy'));
+    const fillButton = kpxcUI.createElement('button', buttonStyle, {'id': 'kpxc-genpw-btn-fillin'}, tr('passwordGeneratorFillAndCopy'));
 
     generateButton.onclick = function(e) { kpxcPassword.generate(e); };
     copyButton.onclick = function(e) { kpxcPassword.copy(e); };
@@ -252,7 +252,7 @@ kpxcPassword.fill = function(e) {
         let password = $('#kpxc-genpw-textfield-password');
         if (field.getAttribute('maxlength')) {
             if (password.value.length > field.getAttribute('maxlength')) {
-                const message = 'Error:\nThe generated password is longer than the allowed length!';
+                const message = tr('passwordGeneratorErrorTooLong');
                 browser.runtime.sendMessage({
                     action: 'show_notification',
                     args: [message]
@@ -316,7 +316,7 @@ kpxcPassword.callbackGeneratedPassword = function(entries) {
             const input = $('#kpxc-genpw-textfield-password');
             input.style.display = 'none';
 
-            const errorMessage = kpxcUI.createElement('div', 'w3-center', {'id': 'kpxc-genpw-error'}, 'Cannot receive generated password.<br />Is KeePassXC or database opened?<br />');
+            const errorMessage = kpxcUI.createElement('div', 'w3-center', {'id': 'kpxc-genpw-error'}, tr('passwordGeneratorError'));
             input.parentElement.append(errorMessage);
 
             kpxcPassword.disableButtons();
@@ -370,13 +370,13 @@ kpxcPassword.whiteButton = function(button) {
 };
 
 kpxcPassword.enableButtons = function() {
-    $('#kpxc-genpw-btn-generate').textContent = 'Generate';
+    $('#kpxc-genpw-btn-generate').textContent = tr('passwordGeneratorGenerate');
     $('#kpxc-genpw-btn-clipboard').style.display = 'inline-block';
     $('#kpxc-genpw-btn-fillin').style.display = 'inline-block';
 };
 
 kpxcPassword.disableButtons = function() {
-    $('#kpxc-genpw-btn-generate').textContent = 'Try again';
+    $('#kpxc-genpw-btn-generate').textContent = tr('passwordGeneratorTryAgain');
     $('#kpxc-genpw-btn-clipboard').style.display = 'none';
     $('#kpxc-genpw-btn-fillin').style.display = 'none';
 };

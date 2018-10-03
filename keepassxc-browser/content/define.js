@@ -50,13 +50,13 @@ kpxcDefine.initDescription = function() {
     description.append(h1);
     description.append(help);
     
-    const buttonDismiss = kpxcUI.createElement('button', 'w3-btn w3-red w3-round w3-small', {'id': 'kpxcDefine-btn-dismiss'}, 'Dismiss');
+    const buttonDismiss = kpxcUI.createElement('button', 'w3-btn w3-red w3-round w3-small', {'id': 'kpxcDefine-btn-dismiss'}, tr('defineDismiss'));
     buttonDismiss.onclick = function(e) {
         $('#kpxcDefine-backdrop').remove();
         $('#kpxcDefine-fields').remove();
     };
 
-    const buttonSkip = kpxcUI.createElement('button', 'w3-btn w3-orange w3-round w3-small', {'id': 'kpxcDefine-btn-skip'}, 'Skip');
+    const buttonSkip = kpxcUI.createElement('button', 'w3-btn w3-orange w3-round w3-small', {'id': 'kpxcDefine-btn-skip'}, tr('defineSkip'));
     buttonSkip.style.marginRight = '5px';
     buttonSkip.onclick = function() {
         if (kpxcDefine.dataStep === 1) {
@@ -70,7 +70,7 @@ kpxcDefine.initDescription = function() {
         }
     };
 
-    const buttonAgain = kpxcUI.createElement('button', 'w3-btn w3-blue w3-round w3-small', {'id': 'kpxcDefine-btn-again'}, 'Again');
+    const buttonAgain = kpxcUI.createElement('button', 'w3-btn w3-blue w3-round w3-small', {'id': 'kpxcDefine-btn-again'}, tr('defineAgain'));
     buttonAgain.style.marginRight = '5px';
     buttonAgain.onclick = function() {
         kpxcDefine.resetSelection();
@@ -78,7 +78,7 @@ kpxcDefine.initDescription = function() {
         kpxcDefine.markAllUsernameFields('#kpxcDefine-fields');
     };
 
-    const buttonConfirm = kpxcUI.createElement('button', 'w3-btn w3-indigo w3-round w3-small', {'id': 'kpxcDefine-btn-confirm'}, 'Confirm');
+    const buttonConfirm = kpxcUI.createElement('button', 'w3-btn w3-indigo w3-round w3-small', {'id': 'kpxcDefine-btn-confirm'}, tr('defineConfirm'));
     buttonConfirm.style.marginRight = '15px';
     buttonConfirm.style.display = 'none';
     buttonConfirm.onclick = function() {
@@ -122,8 +122,8 @@ kpxcDefine.initDescription = function() {
 
     const location = cip.getDocumentLocation();
     if (cip.settings['defined-custom-fields'] && cip.settings['defined-custom-fields'][location]) {
-        const p = kpxcUI.createElement('p', '', {}, 'For this page credential fields are already selected and will be overwritten.<br />');
-        const buttonDiscard = kpxcUI.createElement('button', 'w3-btn w3-red w3-round w3-small', {'id': 'kpxcDefine-btn-discard'}, 'Discard');
+        const p = kpxcUI.createElement('p', '', {}, tr('defineAlreadySelected') + '<br />');
+        const buttonDiscard = kpxcUI.createElement('button', 'w3-btn w3-red w3-round w3-small', {'id': 'kpxcDefine-btn-discard'}, tr('defineDiscard'));
         buttonDiscard.style.marginTop = '5px';
         buttonDiscard.onclick = function() {
             delete cip.settings['defined-custom-fields'][location];
@@ -178,7 +178,7 @@ kpxcDefine.markAllUsernameFields = function(chooser) {
         const field = e.currentTarget;
         kpxcDefine.selection.username = field.getAttribute('kpxc-id');
         field.classList.add('kpxcDefine-fixed-username-field');
-        field.textContent = 'Username';
+        field.textContent = tr('username');
         field.onclick = null;
         kpxcDefine.prepareStep2();
         kpxcDefine.markAllPasswordFields('#kpxcDefine-fields');
@@ -191,7 +191,7 @@ kpxcDefine.markAllPasswordFields = function(chooser) {
         const field = e.currentTarget;
         kpxcDefine.selection.password = field.getAttribute('kpxc-id');
         field.classList.add('kpxcDefine-fixed-password-field');
-        field.textContent = 'Password';
+        field.textContent = tr('password');
         field.onclick = null;
         kpxcDefine.prepareStep3();
         kpxcDefine.markAllStringFields('kpxcDefine-fields');
@@ -207,7 +207,7 @@ kpxcDefine.markAllStringFields = function(chooser) {
 
         const count = Object.keys(kpxcDefine.selection.fields).length;
         field.classList.add('kpxcDefine-fixed-string-field');
-        field.textContent = 'String field #' + String(count);
+        field.textContent = tr('defineStringField') + String(count);
         field.onclick = null;
     };
     kpxcDefine.markFields(chooser, cipFields.inputQueryPattern + ', select');
@@ -248,7 +248,7 @@ kpxcDefine.prepareStep1 = function() {
     help.style.marginBottom = '0px';
     help.textContent = '';
 
-    $('#kpxcDefine-chooser-headline').textContent = '1. Choose a username field';
+    $('#kpxcDefine-chooser-headline').textContent = tr('defineChooseUsername');
     kpxcDefine.dataStep = 1;
     $('#kpxcDefine-btn-skip').style.display = 'inline-block';
     $('#kpxcDefine-btn-confirm').style.display = 'none';
@@ -260,15 +260,15 @@ kpxcDefine.prepareStep2 = function() {
     help.style.marginBottom = '0px';
     help.textContent = '';
 
-    $('#kpxcDefine-chooser-headline').textContent = '2. Now choose a password field';
+    $('#kpxcDefine-chooser-headline').textContent = tr('defineChoosePassword');
     kpxcDefine.dataStep = 2;
     $('#kpxcDefine-btn-again').style.display = 'inline-block';
 };
 
 kpxcDefine.prepareStep3 = function() {
     $('#kpxcDefine-help').style.marginBottom = '10px';
-    $('#kpxcDefine-help').textContent = 'Please confirm your selection or choose more fields as String fields.';
-    $('#kpxcDefine-chooser-headline').textContent = '3. Confirm selection';
+    $('#kpxcDefine-help').textContent = tr('defineHelpText');
+    $('#kpxcDefine-chooser-headline').textContent = tr('defineConfirmSelection');
     kpxcDefine.dataStep = 3;
     $('#kpxcDefine-btn-skip').style.display = 'none';
     $('#kpxcDefine-btn-again').style.display = 'inline-block';
