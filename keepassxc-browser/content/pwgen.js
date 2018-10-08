@@ -4,6 +4,8 @@ var kpxcPassword = {};
 kpxcPassword.observedIcons = [];
 kpxcPassword.observingLock = false;
 kpxcPassword.created = false;
+kpxcPassword.icon = null;
+kpxcPassword.inputField = null;
 kpxcPassword.selected = null;
 kpxcPassword.startPosX = 0;
 kpxcPassword.startPosY = 0;
@@ -35,6 +37,7 @@ kpxcPassword.initField = function(field, inputs, pos) {
     field.setAttribute('kpxc-password-generator', true);
 
     kpxcPassword.createIcon(field);
+    kpxcPassword.inputField = field;
 
     let found = false;
     if (inputs) {
@@ -94,7 +97,7 @@ kpxcPassword.createIcon = function(field) {
     });
 
     kpxcPassword.setIconPosition(icon, field);
-    
+    kpxcPassword.icon = icon;
     kpxcPassword.observedIcons.push(icon);
     document.body.appendChild(icon);
 };
@@ -363,3 +366,10 @@ kpxcPassword.disableButtons = function() {
     $('#kpxc-pwgen-btn-copy').style.display = 'none';
     $('#kpxc-pwgen-btn-fill').style.display = 'none';
 };
+
+// Handle icon position on window resize
+window.addEventListener('resize', function(event) {
+    if (kpxcPassword.inputField && kpxcPassword.icon) {
+        kpxcPassword.setIconPosition(kpxcPassword.icon, kpxcPassword.inputField);
+    }
+});
