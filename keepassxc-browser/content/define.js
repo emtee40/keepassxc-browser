@@ -50,13 +50,13 @@ kpxcDefine.initDescription = function() {
     description.append(h1);
     description.append(help);
     
-    const buttonDismiss = kpxcUI.createElement('button', 'w3-btn w3-red w3-round w3-small', {'id': 'kpxcDefine-btn-dismiss'}, tr('defineDismiss'));
+    const buttonDismiss = kpxcUI.createElement('button', 'kpxc-button kpxc-red-button', {'id': 'kpxcDefine-btn-dismiss'}, tr('defineDismiss'));
     buttonDismiss.onclick = function(e) {
         $('#kpxcDefine-backdrop').remove();
         $('#kpxcDefine-fields').remove();
     };
 
-    const buttonSkip = kpxcUI.createElement('button', 'w3-btn w3-orange w3-round w3-small', {'id': 'kpxcDefine-btn-skip'}, tr('defineSkip'));
+    const buttonSkip = kpxcUI.createElement('button', 'kpxc-button kpxc-orange-button', {'id': 'kpxcDefine-btn-skip'}, tr('defineSkip'));
     buttonSkip.style.marginRight = '5px';
     buttonSkip.onclick = function() {
         if (kpxcDefine.dataStep === 1) {
@@ -70,7 +70,7 @@ kpxcDefine.initDescription = function() {
         }
     };
 
-    const buttonAgain = kpxcUI.createElement('button', 'w3-btn w3-blue w3-round w3-small', {'id': 'kpxcDefine-btn-again'}, tr('defineAgain'));
+    const buttonAgain = kpxcUI.createElement('button', 'kpxc-button kpxc-blue-button', {'id': 'kpxcDefine-btn-again'}, tr('defineAgain'));
     buttonAgain.style.marginRight = '5px';
     buttonAgain.onclick = function() {
         kpxcDefine.resetSelection();
@@ -78,7 +78,7 @@ kpxcDefine.initDescription = function() {
         kpxcDefine.markAllUsernameFields('#kpxcDefine-fields');
     };
 
-    const buttonConfirm = kpxcUI.createElement('button', 'w3-btn w3-indigo w3-round w3-small', {'id': 'kpxcDefine-btn-confirm'}, tr('defineConfirm'));
+    const buttonConfirm = kpxcUI.createElement('button', 'kpxc-button kpxc-green-button', {'id': 'kpxcDefine-btn-confirm'}, tr('defineConfirm'));
     buttonConfirm.style.marginRight = '15px';
     buttonConfirm.style.display = 'none';
     buttonConfirm.onclick = function() {
@@ -122,8 +122,9 @@ kpxcDefine.initDescription = function() {
 
     const location = cip.getDocumentLocation();
     if (cip.settings['defined-custom-fields'] && cip.settings['defined-custom-fields'][location]) {
-        const p = kpxcUI.createElement('p', '', {}, tr('defineAlreadySelected') + '<br />');
-        const buttonDiscard = kpxcUI.createElement('button', 'w3-btn w3-red w3-round w3-small', {'id': 'kpxcDefine-btn-discard'}, tr('defineDiscard'));
+        const div = kpxcUI.createElement('div', '', {});
+        const defineDiscard = kpxcUI.createElement('p', '', {}, tr('defineAlreadySelected'));
+        const buttonDiscard = kpxcUI.createElement('button', 'kpxc-button kpxc-red-button', {'id': 'kpxcDefine-btn-discard'}, tr('defineDiscard'));
         buttonDiscard.style.marginTop = '5px';
         buttonDiscard.onclick = function() {
             delete cip.settings['defined-custom-fields'][location];
@@ -137,15 +138,16 @@ kpxcDefine.initDescription = function() {
                 action: 'load_settings'
             });
 
-            p.remove();
+            div.remove();
 
             kpxcDefine.resetSelection();
             kpxcDefine.prepareStep1();
             kpxcDefine.markAllUsernameFields('#kpxcDefine-fields');
         };
 
-        p.append(buttonDiscard);
-        description.append(p);
+        div.append(defineDiscard);
+        div.append(buttonDiscard);
+        description.append(div);
     }
 };
 

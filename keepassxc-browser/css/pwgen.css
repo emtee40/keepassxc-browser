@@ -78,33 +78,6 @@
     cursor: pointer;
 }
 
-.kpxc-pwgen-button {
-    font-size: 12px !important;
-    height: 28px;
-    margin: .2em;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.kpxc-green-button {
-    color: #fff !important;
-    background-color: #6cac4d !important;
-}
-
-.kpxc-white-button {
-    color: #000 !important;
-    background-color: #fff !important;
-}
-
-.kpxc-pwgen-button:hover {
-    background-color: #eee;
-}
-
-.kpxc-pwgen-button:active {
-    background-color: #ddd;   
-}
-
 .kpxc-pwgen-input {
     width: 100%;
     font-size: 12px !important;

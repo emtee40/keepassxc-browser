@@ -138,9 +138,9 @@ kpxcPassword.createDialog = function() {
     
     // Buttons
     const buttonsRow = kpxcUI.createElement('div', 'kpxc-pwgen-buttons');
-    const generateButton = kpxcUI.createElement('button', 'kpxc-pwgen-button', {'id': 'kpxc-pwgen-btn-generate'}, tr('passwordGeneratorGenerate'));
-    const copyButton = kpxcUI.createElement('button', 'kpxc-pwgen-button', {'id': 'kpxc-pwgen-btn-copy'}, tr('passwordGeneratorCopy'));
-    const fillButton = kpxcUI.createElement('button', 'kpxc-pwgen-button', {'id': 'kpxc-pwgen-btn-fill'}, tr('passwordGeneratorFillAndCopy'));
+    const generateButton = kpxcUI.createElement('button', 'kpxc-button kpxc-white-button', {'id': 'kpxc-pwgen-btn-generate'}, tr('passwordGeneratorGenerate'));
+    const copyButton = kpxcUI.createElement('button', 'kpxc-button', {'id': 'kpxc-pwgen-btn-copy'}, tr('passwordGeneratorCopy'));
+    const fillButton = kpxcUI.createElement('button', 'kpxc-button', {'id': 'kpxc-pwgen-btn-fill'}, tr('passwordGeneratorFillAndCopy'));
     generateButton.onclick = function(e) { kpxcPassword.generate(e); };
     copyButton.onclick = function(e) { kpxcPassword.copy(e); };
     fillButton.onclick = function(e) { kpxcPassword.fill(e); };
@@ -328,12 +328,14 @@ kpxcPassword.checkObservedElements = function() {
 };
 
 kpxcPassword.greenButton = function(button) {
+    const b = $(button);
     $(button).classList.remove('kpxc-white-button');
     $(button).classList.add('kpxc-green-button');
 };
 
 kpxcPassword.whiteButton = function(button) {
-    $(button).classList.remove('kpxc-green-buttpn');
+    const b = $(button);
+    $(button).classList.remove('kpxc-green-button');
     $(button).classList.add('kpxc-white-button');
 };
 
@@ -358,7 +360,7 @@ window.addEventListener('resize', function(event) {
 
 // Closes the dialog when clicked outside of it)
 document.onclick = function(e) {
-    if (kpxcPassword.dialog.style.display === 'block') {
+    if (kpxcPassword.dialog && kpxcPassword.dialog.style.display === 'block') {
         const dialogEndX = kpxcPassword.dialog.offsetLeft + kpxcPassword.dialog.offsetWidth;
         const dialogEndY = kpxcPassword.dialog.offsetTop + kpxcPassword.dialog.offsetHeight;
 
