@@ -176,24 +176,6 @@ kpxcPassword.mouseDown = function(e) {
     return false;
 };
 
-document.onclick = function(e) {
-    // TODO (closes the dialog when clicked outside of it)
-    /*if (kpxcPassword.dialog.style.display !== 'none') {
-
-        //console.log('click pos x: ' + e.clientX + ', y: ' + e.clientY);
-
-        const dialogEndX = kpxcPassword.dialog.offsetLeft + kpxcPassword.dialog.offsetWidth;
-        //console.log('dialogStartX: ' + dialog.offsetLeft + ', dialogEndX: ' + dialogEndX);
-
-        const dialogEndY = kpxcPassword.dialog.offsetTop + kpxcPassword.dialog.offsetHeight;
-        //console.log('dialogStartY: ' + dialog.offsetTop + ' dialogEndY: ' + dialogEndY);
-
-        if ((e.clientX < kpxcPassword.dialog.offsetLeft || e.clientX > dialogEndX) || (e.clientY < kpxcPassword.dialog.offsetTop || e.clientY > dialogEndY)) {
-            //kpxcPassword.openDialog();
-        }
-    }*/
-};
-
 kpxcPassword.openDialog = function() {
     if (kpxcPassword.dialog.style.display === '' || kpxcPassword.dialog.style.display === 'none') {
         kpxcPassword.dialog.style.display = 'block';
@@ -373,3 +355,17 @@ window.addEventListener('resize', function(event) {
         kpxcPassword.setIconPosition(kpxcPassword.icon, kpxcPassword.inputField);
     }
 });
+
+// Closes the dialog when clicked outside of it)
+document.onclick = function(e) {
+    if (kpxcPassword.dialog.style.display === 'block') {
+        const dialogEndX = kpxcPassword.dialog.offsetLeft + kpxcPassword.dialog.offsetWidth;
+        const dialogEndY = kpxcPassword.dialog.offsetTop + kpxcPassword.dialog.offsetHeight;
+
+        if ((e.clientX < kpxcPassword.dialog.offsetLeft || e.clientX > dialogEndX) || 
+            (e.clientY < kpxcPassword.dialog.offsetTop || e.clientY > dialogEndY) &&
+            !e.target.classList.contains('kpxc-pwgen-icon')) {
+            kpxcPassword.openDialog();
+        }
+    }
+};
